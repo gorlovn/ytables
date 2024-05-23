@@ -1,0 +1,11 @@
+ext_df_file: "ext_df.xlsx"
+result_df_file: "result_df.xlsx"
+line_start: 6
+columns:
+  region: 210
+  r_number_prefecture: 690
+  r_number_county: 810
+  cities: 940
+  districts: 1080
+  counties: 1210
+  a_counties: 1350

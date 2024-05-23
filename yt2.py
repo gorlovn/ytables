@@ -23,6 +23,7 @@ else:
 
 CWD = os.getcwd()
 DATA_PATH = os.path.join(CWD, 'data')
+YAML_FILE = "yt2.yaml"
 EXT_DF_FILE_NAME = 'ext_df.xlsx'
 RESULT_DF_FILE_NAME = 'result_df.xlsx'
 
@@ -105,30 +106,32 @@ def ext_df_2_result_df(_ext_df_file, _result_df_file, _data_path=DATA_PATH,
 
 if __name__ == "__main__":
     """
-    1. Имя промежуточного файла
-    2. Имя файла с результатом
+    1. Имя файла с параметрами
     """
     import sys
+    import yaml
 
-    ext_df_file = EXT_DF_FILE_NAME
-    result_df_file = RESULT_DF_FILE_NAME
-
+    yaml_file = YAML_FILE
     n_args = len(sys.argv)
     if n_args > 1:
-        ext_df_file = sys.argv[1]
-        if n_args > 2:
-            result_df_file = sys.argv[2]
+        yaml_file = sys.argv[1]
 
-    line_start = 6
-    line_end = None  # до последней строки
-    columns = {"region": 210,
-               "r_number_prefecture": 690,
-               "r_number_county": 810,
-               "cities": 940,
-               "districts": 1080,
-               "counties": 1210,
-               "a_counties": 1350
-               }
+    yaml_path = os.path.join(DATA_PATH, yaml_file)
+    if not os.path.isfile(yaml_path):
+        log.error(f"Не найден конфигурационный файл {yaml_path}")
+        sys.exit(1)
+
+    with open(yaml_path, "r") as f:
+        args = yaml.safe_load(f)
+
+    ext_df_file = args.get('ext_df_file', EXT_DF_FILE_NAME)
+    result_df_file = args.get('result_df_file', RESULT_DF_FILE_NAME)
+    line_start = args.get('line_start')
+    line_end = args.get('line_end')
+    columns = args.get('columns')
+    if type(columns) is not dict:
+        log.error(f"Столбцы (columns) не определены в файле {yaml_path}")
+        sys.exit(1)
 
     rr = ext_df_2_result_df(ext_df_file, result_df_file,
                             _line_start=line_start,
