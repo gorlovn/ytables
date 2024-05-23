@@ -1,0 +1,24 @@
+*.-
+*.pyc
+*.out
+*.log
+*.*~
+.~lock*
+*.dat
+*.xls
+*.sh
+*.ini
+*.spec
+.DS_Store
+.idea/
+.env/
+.vscode/
+.env
+log/
+data/
+images/
+
+# config files
+/*.yaml
+
+venv/
